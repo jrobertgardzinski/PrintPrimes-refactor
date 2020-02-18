@@ -1,4 +1,4 @@
-# PrintPrimes refactore
+# PrintPrimes refactor
 The project goal is to refactor PrintPrimes.java function to Object Oriented program following uncle's Bob rules. I haven't focused neither on PrintPrimes.java code nor author's solution, except the idea of splitting it into three parts:
 
 - PrimePrinter,
