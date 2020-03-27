@@ -3,17 +3,18 @@ package pl.jrobertgardzinski.primes.printer;
 import java.util.List;
 
 public class ConsolePrinter implements PrimesPrinter {
-    private final int RR; // rows?
-    private final int CC; // columns?
+    private final int rows; // rows?
+    private final int columns; // columns?
     private final int columnMinimumSpace;
 
     private List<Integer> primes;
-    private int PAGENUMBER;
-    private int PAGEOFFSET;
+    // TODO merge pageNumber and pageOffset into one class
+    private int pageNumber;
+    private int pageOffset;
 
     private ConsolePrinter(Builder builder) {
-        this.RR = builder.RR;
-        this.CC = builder.CC;
+        this.rows = builder.rows;
+        this.columns = builder.columns;
         this.columnMinimumSpace = builder.columnMinimumSpace;
     }
 
@@ -29,12 +30,12 @@ public class ConsolePrinter implements PrimesPrinter {
     }
 
     private void resetPageData() {
-        PAGENUMBER = 1;
-        PAGEOFFSET = 1;
+        pageNumber = 1;
+        pageOffset = 1;
     }
 
     private boolean areAllPrimesPrinted() {
-        return PAGEOFFSET < primes.size();
+        return pageOffset < primes.size();
     }
 
     private void printNewPage() {
@@ -44,33 +45,33 @@ public class ConsolePrinter implements PrimesPrinter {
     }
 
     private void printHeader() {
-        System.out.println("The First " + primes.size() + " Prime Numbers --- Page " + PAGENUMBER);
+        System.out.println("The First " + primes.size() + " Prime Numbers --- Page " + pageNumber);
         System.out.println("");
     }
 
     private void printPrimes() {
-        for (int ROWOFFSET = PAGEOFFSET; ROWOFFSET < PAGEOFFSET + RR; ROWOFFSET++) {
-            for (int C = 0; C < CC; C++)
-                if (ROWOFFSET + C * RR <= primes.size())
-                    System.out.format("%10d", primes.get(ROWOFFSET + C * RR));
+        for (int rowOffset = pageOffset; rowOffset < pageOffset + rows; rowOffset++) {
+            for (int currentColumn = 0; currentColumn < columns; currentColumn++)
+                if (rowOffset + currentColumn * rows <= primes.size())
+                    System.out.format("%10d", primes.get(rowOffset + currentColumn * rows));
             System.out.println("");
         }
     }
 
     private void finishPrintingPage() {
         System.out.println("\f");
-        PAGENUMBER = PAGENUMBER + 1;
-        PAGEOFFSET = PAGEOFFSET + RR * CC;
+        pageNumber = pageNumber + 1;
+        pageOffset = pageOffset + rows * columns;
     }
 
     public static class Builder {
-        private final int RR;
-        private final int CC;
+        private final int rows;
+        private final int columns;
         private int columnMinimumSpace;
 
-        public Builder(int rr, int cc) {
-            this.RR = rr;
-            this.CC = cc;
+        public Builder(int rows, int columns) {
+            this.rows = rows;
+            this.columns = columns;
             // initialize optional variable
             this.columnMinimumSpace = 6;
         }
