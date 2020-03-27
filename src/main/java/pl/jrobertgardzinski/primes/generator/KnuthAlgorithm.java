@@ -2,24 +2,24 @@ package pl.jrobertgardzinski.primes.generator;
 
 public class KnuthAlgorithm implements PrimesGenerator {
 
-    private final int M; // primes array length
-    private final int ORDMAX; // for M == 1000 MULT length will never exceed 30
+    private final int quantityOfPrimes;
+    // TODO: "for M == 1000 MULT length will never exceed 30" Make ordmax be assigned automatically by FLOOR(SQRT(quantityOfPrimes))
+    private final int multArrayLength;
 
-    int P[]; // primes
-    int J; // next odd number
-    int K; // index of primes
-    boolean JPRIME; // while loop condition
-    int ORD; // order?
-    int SQUARE; // disclaimer: odd^2 == odd
-    int N;
-    int MULT[]; // list of composite numbers
+    int primes[];
+    int nextOddNumber;
+    int currentPrimesIndex;
+    boolean isPrimeComputed;
+    int order; // Not sure if name is accurate
+    int square;
+    int multiplicitiesOfCompositeNumbers[];
 
-    public KnuthAlgorithm(int m, int ORDMAX) {
-        this.M = m;
-        this.ORDMAX = ORDMAX;
+    public KnuthAlgorithm(int quantityOfPrimes, int multArrayLength) {
+        this.quantityOfPrimes = quantityOfPrimes;
+        this.multArrayLength = multArrayLength;
 
-        P = new int[M + 1];
-        MULT = new int[ORDMAX + 1];
+        primes = new int[this.quantityOfPrimes + 1];
+        multiplicitiesOfCompositeNumbers = new int[multArrayLength + 1];
     }
 
     public int[] generate() {
@@ -29,23 +29,23 @@ public class KnuthAlgorithm implements PrimesGenerator {
             calculate();
         }
 
-        return P;
+        return primes;
     }
 
     public int[] getPrimes(){
-        return P;
+        return primes;
     }
 
     private void setupValues() {
-        J = 1;
-        K = 1;
-        P[1] = 2;
-        ORD = 2;
-        SQUARE = 9;
+        nextOddNumber = 1;
+        currentPrimesIndex = 1;
+        primes[1] = 2;
+        order = 2;
+        square = 9;
     }
 
     private boolean arrayOfPrimesIsNotFilled() {
-        return K < M;
+        return currentPrimesIndex < quantityOfPrimes;
     }
 
     private void calculate() {
@@ -58,40 +58,39 @@ public class KnuthAlgorithm implements PrimesGenerator {
     }
 
     private void getNextOddNumber() {
-        J = J + 2;
+        nextOddNumber = nextOddNumber + 2;
     }
 
     private void updateSquareArray() {
-        if (J == SQUARE) {
-            ORD = ORD + 1;
-            SQUARE = P[ORD] * P[ORD]; //9, 25, 49 etc.
-            MULT[ORD - 1] = J; // 9, 25, 49, etc.
+        if (nextOddNumber == square) {
+            order = order + 1;
+            square = primes[order] * primes[order];
+            multiplicitiesOfCompositeNumbers[order - 1] = nextOddNumber;
         }
     }
 
     private void seekForPrime() {
-        // finding prime number
-        N = 2;
-        JPRIME = true;
-        while (N < ORD && JPRIME) {
+        int N = 2;
+        isPrimeComputed = true;
+        while (N < order && isPrimeComputed) {
             // myk z punktu 24. knuth literate programming
             // let's say - modified sieve of Erastothenes
-            while (MULT[N] < J)
-                MULT[N] = MULT[N] + P[N] + P[N];
+            while (multiplicitiesOfCompositeNumbers[N] < nextOddNumber)
+                multiplicitiesOfCompositeNumbers[N] = multiplicitiesOfCompositeNumbers[N] + primes[N] + primes[N];
             // check if J is composite number
-            if (MULT[N] == J)
-                JPRIME = false;
+            if (multiplicitiesOfCompositeNumbers[N] == nextOddNumber)
+                isPrimeComputed = false;
             N = N + 1;
         }
     }
 
     private boolean primeNotFound() {
-        return !JPRIME;
+        return !isPrimeComputed;
     }
 
     private void doSomeStuffWithFoundPrimeNumber() {
-        K = K + 1;
-        P[K] = J;
+        currentPrimesIndex = currentPrimesIndex + 1;
+        primes[currentPrimesIndex] = nextOddNumber;
     }
 
 }
