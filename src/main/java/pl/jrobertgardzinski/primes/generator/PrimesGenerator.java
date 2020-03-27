@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface PrimesGenerator {
     // TODO change return type to List<Integer>
-    int[] generate();
+    List<Integer> generate();
 }

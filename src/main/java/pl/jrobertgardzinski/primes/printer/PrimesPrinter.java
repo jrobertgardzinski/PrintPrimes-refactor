@@ -1,5 +1,7 @@
 package pl.jrobertgardzinski.primes.printer;
 
+import java.util.List;
+
 public interface PrimesPrinter {
-    public void print(int[] primes);
+    void print(List<Integer> primes);
 }

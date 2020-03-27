@@ -1,5 +1,9 @@
 package pl.jrobertgardzinski.primes.generator;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class KnuthAlgorithm implements PrimesGenerator {
 
     private final int quantityOfPrimes;
@@ -23,18 +27,18 @@ public class KnuthAlgorithm implements PrimesGenerator {
         return (int)Math.floor(Math.sqrt(quantityOfPrimes)) + 1;
     }
 
-    public int[] generate() {
+    public List<Integer> generate() {
         setupValues();
 
         while (arrayOfPrimesIsNotFilled()) {
             calculate();
         }
 
-        return primes;
+        return getPrimes();
     }
 
-    public int[] getPrimes(){
-        return primes;
+    public List<Integer> getPrimes(){
+        return convertToList(primes);
     }
 
     private void setupValues() {
@@ -56,6 +60,10 @@ public class KnuthAlgorithm implements PrimesGenerator {
             seekForPrime();
         } while (primeNotFound());
         doSomeStuffWithFoundPrimeNumber();
+    }
+
+    private List<Integer> convertToList(int[] primes) {
+        return Arrays.stream(primes).boxed().collect(Collectors.toList());
     }
 
     private void getNextOddNumber() {

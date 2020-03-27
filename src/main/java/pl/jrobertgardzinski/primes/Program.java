@@ -4,8 +4,6 @@ import pl.jrobertgardzinski.primes.generator.KnuthAlgorithm;
 import pl.jrobertgardzinski.primes.generator.PrimesGenerator;
 import pl.jrobertgardzinski.primes.printer.ConsolePrinter;
 import pl.jrobertgardzinski.primes.printer.PrimesPrinter;
-
-import java.util.Arrays;
 import java.util.List;
 
 public class Program {
@@ -13,7 +11,7 @@ public class Program {
         PrimesGenerator primesGenerator = new KnuthAlgorithm(1000);
         PrimesPrinter primesPrinter = new ConsolePrinter();
 
-        int[] primes = primesGenerator.generate();
+        List<Integer> primes = primesGenerator.generate();
 
         primesPrinter.print(primes);
     }

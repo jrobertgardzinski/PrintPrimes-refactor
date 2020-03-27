@@ -8,6 +8,7 @@ import org.junit.jupiter.api.TestInstance;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,9 +23,7 @@ class PrimesGeneratorTest {
 
         this.primesGenerator = new KnuthAlgorithm(quantityOfPrimes);
 
-        int[] primes = primesGenerator.generate();
-
-        generatedPrimes = convertToList(primes);
+        generatedPrimes = primesGenerator.generate();
     }
 
     private List<Integer> convertToList(int[] primes) {
@@ -34,20 +33,18 @@ class PrimesGeneratorTest {
     @Test
     @DisplayName("Should contain some prime numbers")
     void containingPrimes() {
-        int[] primes = { 2, 3, 5, 7, 11, 13, 19, 2003, 3541};
+        List<Integer> primes = Stream.of(2, 3, 5, 7, 11, 13, 19, 2003, 3541)
+                .collect(Collectors.toList());
 
-        List<Integer> primesList = convertToList(primes);
-
-        assertTrue(generatedPrimes.containsAll(primesList));
+        assertTrue(generatedPrimes.containsAll(primes));
     }
 
     @Test
     @DisplayName("Should not contain some composite numbers")
     void notContainingCompositeNumbers() {
-        int[] composites = { 4, 6, 8, 9, 12, 15, 18, 32, 64, 128, 256, 512, 1024};
+        List<Integer> composites = Stream.of(4, 6, 8, 9, 12, 15, 18, 32, 64, 128, 256, 512, 1024)
+                .collect(Collectors.toList());
 
-        List<Integer> compositesList = convertToList(composites);
-
-        assertFalse(generatedPrimes.containsAll(compositesList));
+        assertFalse(generatedPrimes.containsAll(composites));
     }
 }
