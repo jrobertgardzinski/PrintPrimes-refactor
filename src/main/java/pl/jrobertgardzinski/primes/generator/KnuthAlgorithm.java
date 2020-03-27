@@ -3,8 +3,6 @@ package pl.jrobertgardzinski.primes.generator;
 public class KnuthAlgorithm implements PrimesGenerator {
 
     private final int quantityOfPrimes;
-    // TODO: "for M == 1000 MULT length will never exceed 30" Make ordmax be assigned automatically by FLOOR(SQRT(quantityOfPrimes))
-    private final int multArrayLength;
 
     int primes[];
     int nextOddNumber;
@@ -14,12 +12,15 @@ public class KnuthAlgorithm implements PrimesGenerator {
     int square;
     int multiplicitiesOfCompositeNumbers[];
 
-    public KnuthAlgorithm(int quantityOfPrimes, int multArrayLength) {
+    public KnuthAlgorithm(int quantityOfPrimes) {
         this.quantityOfPrimes = quantityOfPrimes;
-        this.multArrayLength = multArrayLength;
 
         primes = new int[this.quantityOfPrimes + 1];
-        multiplicitiesOfCompositeNumbers = new int[multArrayLength + 1];
+        multiplicitiesOfCompositeNumbers = new int[calculateLengthOfMultiplicitiesOfCompositeNumbers()];
+    }
+
+    private int calculateLengthOfMultiplicitiesOfCompositeNumbers() {
+        return (int)Math.floor(Math.sqrt(quantityOfPrimes)) + 1;
     }
 
     public int[] generate() {
@@ -73,7 +74,7 @@ public class KnuthAlgorithm implements PrimesGenerator {
         int N = 2;
         isPrimeComputed = true;
         while (N < order && isPrimeComputed) {
-            // myk z punktu 24. knuth literate programming
+            // 24. knuth literate programming
             // let's say - modified sieve of Erastothenes
             while (multiplicitiesOfCompositeNumbers[N] < nextOddNumber)
                 multiplicitiesOfCompositeNumbers[N] = multiplicitiesOfCompositeNumbers[N] + primes[N] + primes[N];
