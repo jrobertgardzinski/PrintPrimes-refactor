@@ -3,12 +3,13 @@ package pl.jrobertgardzinski.primes.printer;
 import java.util.List;
 
 public class ConsolePrinter implements PrimesPrinter {
-    private final int rows; // rows?
-    private final int columns; // columns?
+    private final int rows;
+    private final int columns;
     private final int columnMinimumSpace;
+    private String cellTemplate;
 
     private List<Integer> primes;
-    // TODO merge pageNumber and pageOffset into one class
+    // TODO consider merging pageNumber and pageOffset into one class
     private int pageNumber;
     private int pageOffset;
 
@@ -32,6 +33,14 @@ public class ConsolePrinter implements PrimesPrinter {
     private void resetPageData() {
         pageNumber = 1;
         pageOffset = 1;
+        cellTemplate = createCellTemplate();
+    }
+
+    private String createCellTemplate() {
+        Integer lastPrime = primes.get(primes.size()-1);
+        Integer lastPrimeStringLength = lastPrime.toString().length();
+        Integer cellWidth = lastPrimeStringLength + columnMinimumSpace;
+        return "%" + cellWidth + "d";
     }
 
     private boolean areAllPrimesPrinted() {
@@ -51,9 +60,11 @@ public class ConsolePrinter implements PrimesPrinter {
 
     private void printPrimes() {
         for (int rowOffset = pageOffset; rowOffset < pageOffset + rows; rowOffset++) {
-            for (int currentColumn = 0; currentColumn < columns; currentColumn++)
-                if (rowOffset + currentColumn * rows <= primes.size())
-                    System.out.format("%10d", primes.get(rowOffset + currentColumn * rows));
+            for (int currentColumn = 0; currentColumn < columns; currentColumn++) {
+                if (rowOffset + currentColumn * rows <= primes.size()) {
+                    System.out.format(cellTemplate, primes.get(rowOffset + currentColumn * rows));
+                }
+            }
             System.out.println("");
         }
     }

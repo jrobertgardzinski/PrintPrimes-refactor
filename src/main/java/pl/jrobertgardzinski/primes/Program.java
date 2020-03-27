@@ -9,7 +9,7 @@ import java.util.List;
 public class Program {
     public static void main(String[] args) {
         PrimesGenerator primesGenerator = new KnuthAlgorithm(1000);
-        PrimesPrinter primesPrinter = new ConsolePrinter();
+        PrimesPrinter primesPrinter = new ConsolePrinter.Builder(50, 4).columnMinimumSpace(16).build();
 
         List<Integer> primes = primesGenerator.generate();
 
