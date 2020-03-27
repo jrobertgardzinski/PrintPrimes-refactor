@@ -10,11 +10,11 @@ import java.util.List;
 
 public class Program {
     public static void main(String[] args) {
-        PrimesGenerator pg = new KnuthAlgorithm();
-        PrimesPrinter pp = new ConsolePrinter();
+        PrimesGenerator primesGenerator = new KnuthAlgorithm(1000);
+        PrimesPrinter primesPrinter = new ConsolePrinter();
 
-        int[] primes = pg.generate();
+        int[] primes = primesGenerator.generate();
 
-        pp.print(primes);
+        primesPrinter.print(primes);
     }
 }
